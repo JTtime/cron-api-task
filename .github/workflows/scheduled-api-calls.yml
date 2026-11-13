@@ -1,0 +1,23 @@
+name: scheduled-api-calls
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # UTC
+  workflow_dispatch:         # lets you trigger it manually to test
+
+jobs:
+  call:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        run: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+    steps:
+      - name: Call API
+        run: |
+          curl -sS -X POST "$API_URL" \
+            -H "Authorization: Bearer $API_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{"your":"payload"}'
+        env:
+          API_URL: ${{ secrets.API_URL }}
+          API_KEY: ${{ secrets.API_KEY }}
